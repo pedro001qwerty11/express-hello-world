@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Enviar imagen a Telegram</title>
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
+<body>
+    <style>
+        body {
+          font-family: Arial, sans-serif;
+          background-color: #f0f0f0;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+        }
+    
+        .container {
+          background-color: white;
+          border-radius: 10px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          padding: 20px;
+          width: 300px;
+        }
+    
+        h2 {
+          margin-top: 0;
+        }
+    
+        form {
+          display: flex;
+          flex-direction: column;
+        }
+    
+        input[type="file"] {
+          margin-bottom: 10px;
+        }
+    
+        button {
+          background-color: #007bff;
+          color: white;
+          border: none;
+          padding: 10px;
+          cursor: pointer;
+          border-radius: 5px;
+        }
+    
+        button:hover {
+          background-color: #0056b3;
+        }
+      </style>
+  <h2>Enviar imagen a Telegram</h2>
+  <form id="imageForm">
+    <input type="file" id="imageInput" accept="image/*" />
+    <button type="submit">Enviar</button>
+  </form>
+  <script>
+     imageInput.onchange = function(e) {
+      alert(this.value);
+      this.value = null;
+    }
+    const botToken = '5841260850:AAE3Vubjqe4wVd9835ZGc7C4ybUX8Vl19jg';
+    const chatId = '-925981868';
+
+    document.getElementById('imageForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      
+      const imageInput = document.getElementById('imageInput');
+      const imageFile = imageInput.files[0];
+
+      if (!imageFile) {
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('chat_id', chatId);
+      formData.append('photo', imageFile);
+
+      const response = await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (data.ok) {
+        alert('Imagen enviada exitosamente');
+      } else {
+        alert('Error al enviar la imagen');
+      }
+    });
+  </script>
+</body>
+</html>
